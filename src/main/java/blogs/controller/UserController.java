@@ -1,6 +1,8 @@
 package blogs.controller;
 
+import blogs.model.User;
 import blogs.service.PostService;
+import blogs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,9 @@ public class UserController {
     @Autowired
     PostService postService;
 
+    @Autowired
+    UserService userService;
+
     @RequestMapping("users/login")
     public String login() {
         return "users/login";
@@ -22,9 +27,18 @@ public class UserController {
         return "users/registration";
     }
 
+    @RequestMapping(value = "users/registration", method = RequestMethod.POST)
+    public String registerUser(User user) {
+        return "users/login";
+    }
+
     @RequestMapping(value = "users/login", method = RequestMethod.POST)
-    public String loginUser() {
-        return "redirect:/posts";
+    public String loginUser(User user) {
+        if (userService.login(user)) {
+            return "redirect:/posts";
+        } else {
+            return "users/login";
+        }
     }
 
     @RequestMapping(value = "users/logout", method = RequestMethod.POST)
