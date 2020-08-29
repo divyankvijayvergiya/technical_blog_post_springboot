@@ -1,11 +1,14 @@
 package blogs.controller;
 
+import blogs.model.Post;
 import blogs.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.ArrayList;
 
 @Controller
 public class PostController {
@@ -15,7 +18,9 @@ public class PostController {
 
     @RequestMapping("posts")
     public String getUserPosts(Model model) {
-        model.addAttribute("posts", postService.getOnePost());
+        ArrayList<Post> postArrayList = new ArrayList<>();
+        postArrayList.add(postService.getOnePost());
+        model.addAttribute("posts", postArrayList);
         return "posts";
     }
 
@@ -25,7 +30,8 @@ public class PostController {
     }
 
     @RequestMapping(value = "posts/create", method = RequestMethod.POST)
-    public String createPost() {
-        return "posts/create";
+    public String createPost(Post newPost) {
+        postService.createPost(newPost);
+        return "redirect:/posts";
     }
 }

@@ -1,47 +1,38 @@
 package blogs.service;
 
 import blogs.model.Post;
+import blogs.repository.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.TypedQuery;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PostService {
+
+    @Autowired
+    private PostRepository postRepository;
+
     public PostService() {
         System.out.println("***Post Service***");
     }
 
-    public ArrayList<Post> getAllPosts() {
-        ArrayList<Post> postArrayList = new ArrayList<>();
-        Post post = new Post();
-        post.setTitle("Post1");
-        post.setBody("Post body 1");
-        post.setDate(new Date());
-
-        Post post1 = new Post();
-        post1.setTitle("Post2");
-        post1.setBody("Post body 2");
-        post1.setDate(new Date());
-
-        Post post3 = new Post();
-        post3.setTitle("Post3");
-        post3.setBody("Post body 3");
-        post3.setDate(new Date());
-
-        postArrayList.add(post);
-        postArrayList.add(post1);
-        postArrayList.add(post3);
-        return postArrayList;
+    public List<Post> getAllPosts() {
+        return postRepository.getAllPosts();
     }
 
-    public ArrayList<Post> getOnePost() {
-        ArrayList<Post> postArrayList = new ArrayList<>();
-        Post post = new Post();
-        post.setTitle("This is your post");
-        post.setBody("This is your post. It has some valid content");
-        post.setDate(new Date());
-        postArrayList.add(post);
-        return postArrayList;
+    public Post getOnePost() {
+        return postRepository.getLatestPost();
+    }
+
+    public void createPost(Post newPost) {
+
     }
 }
