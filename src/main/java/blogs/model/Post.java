@@ -3,11 +3,13 @@ package blogs.model;
 import javax.persistence.*;
 import java.util.Date;
 
+@SuppressWarnings("ALL")
 @Entity
 @Table(name = "posts")
 public class Post {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
 
@@ -17,7 +19,7 @@ public class Post {
     @Column(name = "body")
     private String body;
 
-    @Transient
+    @Column(name = "date")
     private Date date;
 
 

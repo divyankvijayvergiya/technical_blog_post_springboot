@@ -3,10 +3,7 @@ package blogs.repository;
 import blogs.model.Post;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +19,52 @@ public class PostRepository {
         return resultList;
     }
 
-    public Post getLatestPost(){
+    public Post getLatestPost() {
         EntityManager entityManager = emf.createEntityManager();
         return entityManager.find(Post.class, 3);
+    }
+
+    public Post createPost(Post newPost) {
+        EntityManager entityManager = emf.createEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        try {
+            entityTransaction.begin();
+            entityManager.persist(newPost);
+            entityTransaction.commit();
+        } catch (Exception e) {
+            entityTransaction.rollback();
+        }
+
+        return newPost;
+    }
+
+    public Post getPost(Integer postId) {
+        EntityManager em = emf.createEntityManager();
+        return em.find(Post.class, postId);
+    }
+
+    public void updatePost(Post updatedPost) {
+        EntityManager entityManager = emf.createEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        try {
+            entityTransaction.begin();
+            entityManager.merge(updatedPost);
+            entityTransaction.commit();
+        } catch (Exception e) {
+            entityTransaction.rollback();
+        }
+    }
+
+    public void deletePost(Integer postId) {
+        EntityManager entityManager = emf.createEntityManager();
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+        try {
+            entityTransaction.begin();
+            Post post = entityManager.find(Post.class, postId);
+            entityManager.remove(post);
+            entityTransaction.commit();
+        } catch (Exception e) {
+            entityTransaction.rollback();
+        }
     }
 }
